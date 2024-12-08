@@ -17,17 +17,17 @@ print('Target',Y)
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-def sigmoid_dervative(x):
-    return sigmoid(x)*(1-sigmoid(x))
-
 def binary_cross_entropy(y_true, y_pred):
-    bce = -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
-    return bce
+    # Add small epsilon to prevent log(0)
+    epsilon = 1e-15
+    y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
 
-def gradient_descent(X, y, learning_rate=0.01, epochs=1000):
+def gradient_descent(X, y, learning_rate=0.0001, epochs=10000):
   # Initialize parameters
-  theta = np.random.uniform(-0.1,0.1,(X.shape[1]))# Initial weights
-  theta_history = error_history = [] # To store MSE values
+  theta = np.zeros(X.shape[1])
+  theta_history =  [] # To store MSE values
+  error_history = []
   for epoch in range(epochs):
       # Linear model
       z = np.dot(X,theta)
@@ -45,7 +45,6 @@ def gradient_descent(X, y, learning_rate=0.01, epochs=1000):
   return theta_history, error_history, theta
 
 _,error_history,theta=gradient_descent(X,Y)
-print("error",error_history[0])
-print("finished error")
-plt.plot(error_history)
+print("final theta:",theta)
+plt.plot([x for x in range(10000)],error_history)
 plt.show()
