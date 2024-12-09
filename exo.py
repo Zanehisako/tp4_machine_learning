@@ -8,11 +8,15 @@ print(data.head())
 X = data.iloc[:,0:8].to_numpy()
 X = np.hstack((X,np.ones((X.shape[0],1))))
 Y = data.iloc[:,8].to_numpy()
-print('Features:',X.shape)
 print('Features:',X)
 print('Target',Y)
-
-
+"""p = np.poly1d(np.polyfit(X,Y,3))
+line = np.linspace(1,X[-1],Y[-1])
+print("poly",p)
+"""
+plt.scatter(X,Y)
+#plt.plot(line,p(line))
+plt.show()
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -43,6 +47,7 @@ def gradient_descent(X, y, learning_rate=0.0001, epochs=10000):
       theta_history.append(theta)
       error_history.append(current_error)
   return theta_history, error_history, theta
+
 
 _,error_history,theta=gradient_descent(X,Y)
 print("final theta:",theta)
